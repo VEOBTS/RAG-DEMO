@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { openai } from "@ai-sdk/google";
+import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 import { z } from "zod";
 import { query } from "@/lib/db";
