@@ -2,7 +2,7 @@ import { Mastra } from "@mastra/core";
 import { QdrantVector } from "@mastra/qdrant";
 
 export const vectorStore = new QdrantVector({
-  id: "knowledge-base-store",
+  id: "local-qdrant", // <-- This is the fix! 
   url: process.env.QDRANT_URL!,
   apiKey: process.env.QDRANT_API_KEY || undefined,
 });
@@ -19,7 +19,7 @@ export async function ensureCollection() {
   if (!existing.includes(COLLECTION_NAME)) {
     await vectorStore.createIndex({
       indexName: COLLECTION_NAME,
-      dimension: 768, // matches Gemini text-embedding-004
+      dimension: 1536, // matches text-embedding-3-small
       metric: "cosine",
     });
   }
