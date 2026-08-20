@@ -1,8 +1,10 @@
 import { Mastra } from "@mastra/core";
 import { QdrantVector } from "@mastra/qdrant";
 
+
+
 export const vectorStore = new QdrantVector({
-  id: "local-qdrant", // <-- This is the fix! 
+  id: "local-qdrant", // //fixid
   url: process.env.QDRANT_URL!,
   apiKey: process.env.QDRANT_API_KEY || undefined,
 });
