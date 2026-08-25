@@ -35,48 +35,48 @@ export default function UploadPage() {
   }
 
   return (
-    <div className="max-w-xl mx-auto py-16 px-4 space-y-6">
+    <div className="max-w-xl mx-auto py-16 px-4 space-y-6 text-text">
       <h1 className="text-2xl font-semibold">Add to Knowledge Base</h1>
 
       <div className="flex gap-2 text-sm">
         <button
           onClick={() => setMode("add")}
-          className={`px-3 py-1.5 rounded-full border ${mode === "add" ? "bg-black text-white" : ""}`}
+          className={`px-3 py-1.5 rounded-full border border-border ${mode === "add" ? "bg-accent text-bg border-accent" : "text-text-muted"}`}
         >
           Add to existing
         </button>
         <button
           onClick={() => setMode("replace")}
-          className={`px-3 py-1.5 rounded-full border ${mode === "replace" ? "bg-black text-white" : ""}`}
+          className={`px-3 py-1.5 rounded-full border border-border ${mode === "replace" ? "bg-accent text-bg border-accent" : "text-text-muted"}`}
         >
           Replace everything
         </button>
       </div>
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-text-muted">
         {mode === "replace"
           ? "This clears the whole knowledge base before adding this document."
           : "This adds to whatever is already in the knowledge base."}
       </p>
 
-      <div className="border rounded-lg p-6 space-y-3">
+      <div className="border border-border bg-surface rounded-lg p-6 space-y-3">
         <p className="font-medium">Upload a PDF or Word document</p>
         <input type="file" accept=".pdf,.docx" onChange={handleFile} />
       </div>
 
-      <div className="border rounded-lg p-6 space-y-3">
+      <div className="border border-border bg-surface rounded-lg p-6 space-y-3">
         <p className="font-medium">Or index a website</p>
         <input
-          className="border rounded px-3 py-2 w-full"
+          className="bg-bg border border-border rounded px-3 py-2 w-full text-text"
           placeholder="https://example.com/docs"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
-        <button className="bg-black text-white rounded px-4 py-2" onClick={handleUrl}>
+        <button className="bg-accent text-bg rounded px-4 py-2 font-medium hover:bg-accent-hover" onClick={handleUrl}>
           Index website
         </button>
       </div>
 
-      {status && <p className="text-sm text-gray-600">{status}</p>}
+      {status && <p className="text-sm text-text-muted">{status}</p>}
     </div>
   );
 }

@@ -5,6 +5,17 @@
   --foreground: #171717;
 }
 
+@theme {
+  --color-bg: #1c1710;
+  --color-surface: #262019;
+  --color-surface-hover: #2f271e;
+  --color-border: #3d3226;
+  --color-text: #f2e9d8;
+  --color-text-muted: #a89a82;
+  --color-accent: #c9974c;
+  --color-accent-hover: #e0ac5c;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

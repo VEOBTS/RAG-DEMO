@@ -30,7 +30,7 @@ export default function DocumentsPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4">
+    <div className="max-w-3xl mx-auto py-10 px-4 text-text">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Knowledge Base</h1>
         {docs.length > 0 && (
@@ -40,17 +40,17 @@ export default function DocumentsPage() {
         )}
       </div>
 
-      {loading && <p className="text-sm text-gray-500">Loading...</p>}
+      {loading && <p className="text-sm text-text-muted">Loading...</p>}
       {!loading && docs.length === 0 && (
-        <p className="text-sm text-gray-500">No documents yet. Go upload one.</p>
+        <p className="text-sm text-text-muted">No documents yet. Go upload one.</p>
       )}
 
       <div className="space-y-2">
         {docs.map((d) => (
-          <div key={d.id} className="flex justify-between items-center border rounded-lg px-4 py-3">
+          <div key={d.id} className="flex justify-between items-center border border-border bg-surface rounded-lg px-4 py-3">
             <div>
               <p className="font-medium">{d.title}</p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-text-muted">
                 {d.status} · {d.chunk_count} chunks · {new Date(d.created_at).toLocaleDateString()}
               </p>
             </div>
