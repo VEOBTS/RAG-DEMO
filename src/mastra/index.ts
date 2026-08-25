@@ -1,15 +1,14 @@
 import { Mastra } from "@mastra/core";
 import { QdrantVector } from "@mastra/qdrant";
 
-
-
 export const vectorStore = new QdrantVector({
-  id: "local-qdrant", // //fixid
+  id: "local-qdrant",
   url: process.env.QDRANT_URL!,
   apiKey: process.env.QDRANT_API_KEY || undefined,
 });
 
-export const COLLECTION_NAME = process.env.QDRANT_COLLECTION || "knowledge_base";
+// Changed the default name so it forces a fresh collection
+export const COLLECTION_NAME = process.env.QDRANT_COLLECTION || "gemini_kb";
 
 export const mastra = new Mastra({
   vectors: { qdrant: vectorStore },
@@ -21,7 +20,7 @@ export async function ensureCollection() {
   if (!existing.includes(COLLECTION_NAME)) {
     await vectorStore.createIndex({
       indexName: COLLECTION_NAME,
-      dimension: 1536, // matches text-embedding-3-small
+      dimension: 768, // <-- Changed to 768 for Gemini!
       metric: "cosine",
     });
   }

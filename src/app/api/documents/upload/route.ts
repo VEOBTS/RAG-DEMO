@@ -18,7 +18,15 @@ export async function POST(req: NextRequest) {
   if (ext !== "pdf" && ext !== "docx") {
     return NextResponse.json({ error: "Only PDF and DOCX are supported." }, { status: 400 });
   }
- 
+  const mode = formData.get("mode") as string; // "add" | "replace"
+  if (mode === "replace") {
+    const { query } = await import("@/lib/db");
+    const { deleteAllPoints } = await import("@/lib/qdrant-admin");
+    const { COLLECTION_NAME, ensureCollection } = await import("@/mastra");
+    await query(`TRUNCATE documents, chunks, conversations, messages`);
+    await deleteAllPoints(COLLECTION_NAME);
+    await ensureCollection();
+  }
   const buffer = Buffer.from(await file.arrayBuffer());
  
   const uploadDir = process.env.UPLOAD_DIR || "./uploads";

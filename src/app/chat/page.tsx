@@ -1,22 +1,24 @@
 "use client";
 import { useState } from "react";
- 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 interface Citation { marker: number; title: string; pageNumber: number | null; }
 interface Message { role: "user" | "assistant"; content: string; citations?: Citation[]; }
- 
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [conversationId, setConversationId] = useState<string | undefined>();
   const [loading, setLoading] = useState(false);
- 
+
   async function send() {
     if (!input.trim()) return;
     const userMsg: Message = { role: "user", content: input };
     setMessages((m) => [...m, userMsg]);
     setInput("");
     setLoading(true);
- 
+
     const res = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -27,38 +29,49 @@ export default function ChatPage() {
     setMessages((m) => [...m, { role: "assistant", content: data.answer, citations: data.citations }]);
     setLoading(false);
   }
- 
+
   return (
-    <div className="max-w-2xl mx-auto py-10 px-4 flex flex-col h-screen">
-      <div className="flex-1 overflow-y-auto space-y-4">
+    <div className="max-w-2xl mx-auto py-8 px-4 flex flex-col h-[calc(100vh-65px)]">
+      <div className="flex-1 overflow-y-auto space-y-6 pr-1">
         {messages.map((m, i) => (
-          <div key={i} className={m.role === "user" ? "text-right" : "text-left"}>
-            <div className={`inline-block rounded-lg px-4 py-2 ${m.role === "user" ? "bg-black text-white" : "bg-gray-100"}`}>
-              {m.content}
-            </div>
-            {m.citations && m.citations.length > 0 && (
-              <div className="mt-1 text-xs text-gray-500 space-x-2">
-                {m.citations.map((c) => (
-                  <span key={c.marker}>
-                    [{c.marker}] {c.title}{c.pageNumber ? `, p.${c.pageNumber}` : ""}
-                  </span>
-                ))}
+          <div key={i} className={m.role === "user" ? "flex justify-end" : "flex justify-start"}>
+            <div
+              className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                m.role === "user" ? "bg-white text-black" : "bg-neutral-900 border border-neutral-800"
+              }`}
+            >
+              <div className="prose prose-invert prose-sm max-w-none leading-relaxed">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.content}</ReactMarkdown>
               </div>
-            )}
+
+              {m.citations && m.citations.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-neutral-800 space-y-1">
+                  <p className="text-xs uppercase tracking-wide text-neutral-500">Sources</p>
+                  {m.citations.map((c) => (
+                    <div key={c.marker} className="text-xs text-neutral-400 flex gap-2">
+                      <span className="text-neutral-600">[{c.marker}]</span>
+                      <span>{c.title}{c.pageNumber ? `, p.${c.pageNumber}` : ""}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         ))}
-        {loading && <p className="text-sm text-gray-400">Thinking...</p>}
+        {loading && <p className="text-sm text-neutral-500">Thinking...</p>}
       </div>
- 
-      <div className="flex gap-2 pt-4 border-t">
+
+      <div className="flex gap-2 pt-4 border-t border-neutral-800">
         <input
-          className="flex-1 border rounded px-3 py-2"
+          className="flex-1 bg-neutral-900 border border-neutral-800 rounded-lg px-3 py-2"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
           placeholder="Ask a question about your documents..."
         />
-        <button className="bg-black text-white rounded px-4 py-2" onClick={send}>Send</button>
+        <button className="bg-white text-black rounded-lg px-4 py-2 font-medium" onClick={send}>
+          Send
+        </button>
       </div>
     </div>
   );
